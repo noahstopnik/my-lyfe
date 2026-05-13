@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+
+<!-- PWA: makes it feel like a native app, not a browser -->
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="My Lyfe"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="theme-color" content="#f9f8f6" media="(prefers-color-scheme: light)"/>
+<meta name="theme-color" content="#111110" media="(prefers-color-scheme: dark)"/>
+
+<!-- PWA Manifest (inline) -->
+<link rel="manifest" href="data:application/json;charset=utf-8,%7B%22name%22%3A%22My%20Lyfe%22%2C%22short_name%22%3A%22My%20Lyfe%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f9f8f6%22%2C%22theme_color%22%3A%22%23f9f8f6%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%3D%2527http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%2527%2520viewBox%3D%270%25200%252096%252096%2527%253E%253Crect%2520width%3D%252796%2527%2520height%3D%252796%2527%2520rx%3D%252722%2527%2520fill%3D%2527%25232d5a3d%2527%2F%253E%253Ctext%2520x%3D%252748%2527%2520y%3D%252768%2527%2520font-size%3D%252754%2527%2520text-anchor%3D%2527middle%2527%253E%25F0%259F%258C%25BF%253C%2Ftext%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22any%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D"/>
+
+<title>My Lyfe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #f9f8f6;
+    --surface: #ffffff;
+    --border: #e8e5e0;
+    --border-light: #f0ede8;
+    --text: #1a1916;
+    --text-2: #6b6760;
+    --text-3: #a8a49e;
+    --accent: #2d5a3d;
+    --accent-light: #e8f0eb;
+    --accent-text: #1e3d2a;
+    --warn: #7a4f1a;
+    --warn-light: #fdf0e0;
+    --info: #1a3a5c;
+    --info-light: #e4eef8;
+    --danger: #8b2020;
+    --radius: 14px;
+    --radius-sm: 8px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #111110;
+      --surface: #1c1b19;
+      --border: #2e2c29;
+      --border-light: #252422;
+      --text: #f0ede8;
+      --text-2: #8a877f;
+      --text-3: #5a5750;
+      --accent: #4a9e6a;
+      --accent-light: #1a2e20;
+      --accent-text: #7dd4a0;
+      --warn: #c8872a;
+      --warn-light: #2a1f0e;
+      --info: #4a82c8;
+      --info-light: #0e1a2a;
+      --danger: #e05555;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html { height: 100%; }
+  body {
+    height: 100%; display: flex; flex-direction: column;
+    background: var(--bg); color: var(--text);
+    font-family: 'Instrument Sans', sans-serif; font-size: 15px;
+    max-width: 640px; margin: 0 auto;
+    /* Push content below status bar on iPhone */
+    padding-top: var(--safe-top);
+  }
+
+  /* APP HEADER */
+  .app-header {
+    padding: 16px 16px 0;
+    display: flex; align-items: flex-end; justify-content: space-between;
+  }
+  .app-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 32px; font-weight: 400; line-height: 1;
+    letter-spacing: -.5px;
+  }
+  .app-title span { color: var(--accent); }
+
+  /* NAV */
+  .nav-bar {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--bg); border-bottom: 1px solid var(--border);
+    display: flex; padding: 0 12px; margin-top: 8px;
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  }
+  .nav-btn {
+    flex: 1; background: none; border: none; border-bottom: 2px solid transparent;
+    padding: 13px 4px 11px; font-family: inherit; font-size: 12px; font-weight: 500;
+    color: var(--text-3); cursor: pointer; transition: color .15s; letter-spacing: .01em;
+    margin-bottom: -1px;
+  }
+  .nav-btn.active { color: var(--text); border-bottom-color: var(--text); }
+  .nav-btn:hover:not(.active) { color: var(--text-2); }
+
+  /* CONTENT */
+  .content { flex: 1; overflow-y: auto; padding: 20px 16px; padding-bottom: calc(24px + var(--safe-bottom)); -webkit-overflow-scrolling: touch; }
+  .section { display: none; animation: fadeIn .18s ease; }
+  .section.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* TODAY */
+  .today-header { margin-bottom: 20px; }
+  .today-date { font-family: 'Instrument Serif', serif; font-size: 26px; font-weight: 400; line-height: 1.2; }
+  .today-sub { font-size: 13px; color: var(--text-2); margin-top: 4px; }
+
+  .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+  .metric { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 12px; box-shadow: var(--shadow); }
+  .metric-val { font-family: 'Instrument Serif', serif; font-size: 26px; font-weight: 400; color: var(--text); }
+  .metric-lbl { font-size: 11px; color: var(--text-3); margin-top: 2px; letter-spacing: .02em; text-transform: uppercase; }
+
+  /* CARDS */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 12px; box-shadow: var(--shadow); overflow: hidden; }
+  .card-head { padding: 14px 16px; font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: .08em; border-bottom: 1px solid var(--border-light); }
+
+  /* SCHEDULE ROWS */
+  .srow { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-bottom: 1px solid var(--border-light); }
+  .srow:last-child { border-bottom: none; }
+  .srow-time { font-size: 12px; color: var(--text-3); min-width: 68px; flex-shrink: 0; }
+  .srow-label { flex: 1; font-size: 14px; color: var(--text); }
+  .tag { font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 20px; flex-shrink: 0; }
+  .tag-routine { background: var(--accent-light); color: var(--accent-text); }
+  .tag-class { background: var(--info-light); color: var(--info); }
+  .tag-baseball { background: var(--warn-light); color: var(--warn); }
+  .tag-daily { background: var(--border-light); color: var(--text-2); }
+
+  /* ROUTINE CARDS */
+  .rcard { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 12px; box-shadow: var(--shadow); overflow: hidden; transition: box-shadow .2s; }
+  .rcard.open { box-shadow: var(--shadow-md); }
+  .rcard-header { display: flex; align-items: center; justify-content: space-between; padding: 16px; cursor: pointer; user-select: none; -webkit-user-select: none; }
+  .rcard-header:active { background: var(--border-light); }
+  .rcard-icon { font-size: 20px; margin-right: 10px; flex-shrink: 0; }
+  .rcard-title { font-size: 15px; font-weight: 600; color: var(--text); }
+  .rcard-meta { font-size: 12px; color: var(--text-3); margin-top: 2px; }
+  .rcard-chevron { font-size: 18px; color: var(--text-3); transition: transform .2s; flex-shrink: 0; }
+  .rcard.open .rcard-chevron { transform: rotate(180deg); }
+
+  .prog-wrap { height: 3px; background: var(--border); margin: 0 16px 4px; border-radius: 2px; }
+  .prog-bar { height: 3px; background: var(--accent); border-radius: 2px; transition: width .3s; }
+
+  /* STEPS */
+  .steps-list { border-top: 1px solid var(--border-light); }
+  .step { display: flex; align-items: flex-start; gap: 10px; padding: 11px 16px; border-bottom: 1px solid var(--border-light); transition: background .12s; }
+  .step:last-child { border-bottom: none; }
+  .step.drag-over { background: var(--accent-light); }
+  .step-circle {
+    width: 22px; height: 22px; border-radius: 50%;
+    border: 1.5px solid var(--border); background: var(--surface);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; flex-shrink: 0; margin-top: 1px;
+    transition: background .15s, border-color .15s;
+  }
+  .step-circle.checked { background: var(--accent); border-color: var(--accent); }
+  .step-circle.checked::after { content: '✓'; font-size: 11px; color: #fff; font-weight: 700; }
+  .step-body { flex: 1; min-width: 0; }
+  .step-text { font-size: 14px; color: var(--text); line-height: 1.5; word-break: break-word; }
+  .step-text.done { text-decoration: line-through; color: var(--text-3); }
+  .step-dur { font-size: 12px; color: var(--text-3); margin-top: 2px; }
+  .step-link { font-size: 12px; color: var(--accent); background: none; border: none; cursor: pointer; font-family: inherit; padding: 0; margin-top: 3px; display: block; text-align: left; }
+  .drag-handle { font-size: 16px; color: var(--text-3); cursor: grab; flex-shrink: 0; margin-top: 2px; display: none; touch-action: none; }
+  .step-del { background: none; border: none; cursor: pointer; color: var(--text-3); font-size: 20px; flex-shrink: 0; padding: 0 2px; display: none; line-height: 1; }
+  .step-del:hover, .step-del:active { color: var(--danger); }
+  .edit-mode .drag-handle { display: block; }
+  .edit-mode .step-circle { display: none; }
+  .edit-mode .step-del { display: block; }
+  .edit-mode .step-text { display: none; }
+  .edit-mode .step-dur { display: none; }
+  .edit-mode .step-link { display: none; }
+  .step-text-input {
+    font-size: 14px; color: var(--text); font-family: inherit;
+    border: 1px solid var(--border); border-radius: 6px;
+    background: var(--bg); padding: 5px 8px; width: 100%;
+    outline: none; line-height: 1.5; display: none; resize: none; overflow: hidden;
+  }
+  .step-dur-input {
+    font-size: 12px; color: var(--text-2); font-family: inherit;
+    border: 1px solid var(--border); border-radius: 5px;
+    background: var(--bg); padding: 3px 6px; width: 90px;
+    outline: none; margin-top: 4px; display: none;
+  }
+  .edit-mode .step-text-input { display: block; }
+  .edit-mode .step-dur-input { display: block; }
+  .step-text-input:focus, .step-dur-input:focus { border-color: var(--accent); }
+
+  .card-footer { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; border-top: 1px solid var(--border-light); }
+  .reset-btn { font-size: 12px; color: var(--text-3); background: none; border: none; cursor: pointer; font-family: inherit; padding: 4px 0; }
+  .reset-btn:hover { color: var(--text-2); }
+  .edit-btn { font-size: 12px; border: 1px solid var(--border); background: none; color: var(--text-2); padding: 5px 12px; border-radius: 20px; cursor: pointer; font-family: inherit; font-weight: 500; transition: all .15s; }
+  .edit-btn.on { background: var(--accent-light); border-color: var(--accent); color: var(--accent-text); }
+  .add-step-btn { display: none; margin: 8px 16px 12px; padding: 9px; border: 1.5px dashed var(--border); border-radius: var(--radius-sm); background: none; color: var(--text-3); font-family: inherit; font-size: 13px; cursor: pointer; width: calc(100% - 32px); text-align: center; }
+  .add-step-btn:active { background: var(--border-light); }
+
+  /* SECTION LABELS */
+  .sec-label { font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: .09em; margin: 20px 0 8px 2px; }
+  .sec-label:first-child { margin-top: 0; }
+  .sub-label { font-size: 11px; color: var(--text-3); text-transform: uppercase; letter-spacing: .06em; margin: 12px 0 4px 2px; }
+
+  /* REMINDERS */
+  .remind-form { display: flex; gap: 8px; margin-bottom: 14px; }
+  .remind-input { flex: 1; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; font-size: 14px; background: var(--surface); color: var(--text); font-family: inherit; outline: none; -webkit-appearance: none; }
+  .remind-input:focus { border-color: var(--accent); }
+  .remind-select { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 8px; font-size: 13px; background: var(--surface); color: var(--text); font-family: inherit; -webkit-appearance: none; }
+  .remind-add-btn { background: var(--accent); color: #fff; border: none; border-radius: var(--radius-sm); padding: 10px 16px; font-size: 20px; cursor: pointer; line-height: 1; flex-shrink: 0; }
+  .filters { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+  .fpill { background: none; border: 1px solid var(--border); border-radius: 20px; padding: 5px 12px; font-size: 12px; color: var(--text-2); cursor: pointer; font-family: inherit; font-weight: 500; }
+  .fpill.on { background: var(--surface); border-color: var(--text-2); color: var(--text); }
+  .remind-item { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-bottom: 1px solid var(--border-light); }
+  .remind-item:last-child { border-bottom: none; }
+  .rcheck { width: 20px; height: 20px; border-radius: 5px; border: 1.5px solid var(--border); cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all .15s; }
+  .rcheck.done { background: var(--accent); border-color: var(--accent); }
+  .rcheck.done::after { content: '✓'; font-size: 11px; color: #fff; font-weight: 700; }
+  .remind-text { flex: 1; font-size: 14px; color: var(--text); }
+  .remind-text.done { text-decoration: line-through; color: var(--text-3); }
+  .remind-del { background: none; border: none; cursor: pointer; color: var(--text-3); font-size: 22px; padding: 0 2px; line-height: 1; }
+  .remind-del:active { color: var(--danger); }
+  .empty { text-align: center; padding: 32px 0; font-size: 14px; color: var(--text-3); }
+
+  /* GCal */
+  .gcal-btn { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--border); background: var(--surface); color: var(--text-2); padding: 8px 14px; border-radius: 20px; font-size: 13px; cursor: pointer; font-family: inherit; font-weight: 500; margin-top: 10px; }
+  .gcal-connected { font-size: 13px; color: var(--accent); display: flex; align-items: center; gap: 5px; margin-top: 10px; font-weight: 500; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <div class="app-title">My <span>Lyfe</span></div>
+</div>
+
+<nav class="nav-bar">
+  <button class="nav-btn active" onclick="showTab('today',this)">📅 Today</button>
+  <button class="nav-btn" onclick="showTab('daily',this)">☀️ Daily</button>
+  <button class="nav-btn" id="nav-protocols" onclick="showTab('protocols',this)">🛡 Protocols</button>
+  <button class="nav-btn" onclick="showTab('reminders',this)">🔔 Reminders</button>
+</nav>
+
+<div class="content">
+
+  <!-- TODAY -->
+  <div id="tab-today" class="section active">
+    <div class="today-header">
+      <div class="today-date" id="today-date"></div>
+      <div class="today-sub" id="today-sub"></div>
+      <div id="gcal-area">
+        <button class="gcal-btn" onclick="connectGCal()">🗓 Connect Google Calendar</button>
+      </div>
+    </div>
+    <div class="metrics">
+      <div class="metric"><div class="metric-val" id="m-events">—</div><div class="metric-lbl">Events</div></div>
+      <div class="metric"><div class="metric-val" id="m-routines">0</div><div class="metric-lbl">Done</div></div>
+      <div class="metric"><div class="metric-val" id="m-reminders">0</div><div class="metric-lbl">Reminders</div></div>
+    </div>
+    <div class="card">
+      <div class="card-head">Day at a glance</div>
+      <div class="srow"><span class="srow-time">8:00 AM</span><span class="srow-label">Wake up · Morning routine</span><span class="tag tag-routine">routine</span></div>
+      <div class="srow"><span class="srow-time">Morning</span><span class="srow-label">Walk Maximus</span><span class="tag tag-daily">daily</span></div>
+      <div class="srow"><span class="srow-time">Daytime</span><span class="srow-label">Next Era training (when scheduled)</span><span class="tag tag-baseball">baseball</span></div>
+      <div class="srow"><span class="srow-time">5:30–7:35</span><span class="srow-label">FRCC class — Mon & Wed (May 26–Aug 3)</span><span class="tag tag-class">class</span></div>
+      <div class="srow"><span class="srow-time">10:30 PM</span><span class="srow-label">Nightly stretching → Bedtime routine</span><span class="tag tag-routine">routine</span></div>
+    </div>
+    <div class="card" id="gcal-card" style="display:none">
+      <div class="card-head">From Google Calendar</div>
+      <div class="srow" style="color:var(--text-3);font-size:13px">Authorize Google Calendar in your browser to pull events here.</div>
+    </div>
+  </div>
+
+  <!-- DAILY -->
+  <div id="tab-daily" class="section">
+    <div id="daily-container"></div>
+  </div>
+
+  <!-- PROTOCOLS -->
+  <div id="tab-protocols" class="section">
+    <div id="protocols-container"></div>
+  </div>
+
+  <!-- REMINDERS -->
+  <div id="tab-reminders" class="section">
+    <div class="remind-form">
+      <input class="remind-input" id="remind-input" placeholder="Add a reminder…" onkeydown="if(event.key==='Enter')addReminder()"/>
+      <select class="remind-select" id="remind-cat">
+        <option value="general">general</option>
+        <option value="baseball">baseball</option>
+        <option value="school">school</option>
+        <option value="health">health</option>
+        <option value="work">work</option>
+      </select>
+      <button class="remind-add-btn" onclick="addReminder()">+</button>
+    </div>
+    <div class="filters" id="filter-pills"></div>
+    <div class="card"><div id="remind-list"></div></div>
+  </div>
+
+</div>
+
+<script>
+const DEFAULTS = {
+  daily: [
+    { id:'morning', icon:'🌅', title:'Morning routine', meta:'~60 min · 8:00 AM', steps:[
+      {text:'Wake up · drink a full glass of water', dur:'2 min'},
+      {text:'Shower', dur:'10 min'},
+      {text:'Brush teeth & shave', dur:'8 min'},
+      {text:'Get dressed', dur:'5 min'},
+      {text:'Eat a piece of fruit', dur:'3 min'},
+      {text:'Take Maximus for a walk', dur:'15 min'},
+      {text:'Daily meditation on Calm app', dur:'10 min'},
+      {text:'Make breakfast · preview your day', dur:'15 min'},
+    ]},
+    { id:'bedtime', icon:'🌙', title:'Bedtime routine', meta:'~30 min · 11:00 PM', steps:[
+      {text:'Stretching routine', dur:'~20 min', link:'nightly-stretch', linkLabel:'Open stretching protocol →'},
+      {text:'Brush teeth & wash face', dur:'5 min'},
+      {text:'Retainers in', dur:'1 min'},
+      {text:'Put phone down — screen-free from here', dur:'—'},
+      {text:'Breathwork — 4-7-8 or box breathing, 4 rounds', dur:'5 min'},
+      {text:'Read until sleepy', dur:'15 min'},
+      {text:'Lights out', dur:'—'},
+    ]},
+  ],
+  protocols: {
+    stretching: [
+      { id:'nightly-stretch', icon:'🧘', title:'Nightly stretching', meta:'~20 min · 10:30 PM', steps:[
+        {text:'Foam roll — quads, hamstrings, IT band, upper back', dur:'4 min'},
+        {text:'Hip flexor stretch — 60 sec each side', dur:'2 min'},
+        {text:'Pigeon pose or figure-4 — 60 sec each side', dur:'2 min'},
+        {text:'Hamstring stretch — 60 sec each side', dur:'2 min'},
+        {text:'Doorway chest & shoulder opener', dur:'1 min'},
+        {text:'Thoracic rotation — 10 reps each side', dur:'2 min'},
+        {text:"Cat-cow + child's pose", dur:'2 min'},
+        {text:'5 slow deep breaths to close out', dur:'1 min'},
+      ]},
+    ],
+    baseball: [
+      { id:'pre-throw', icon:'⚾', title:'Pre-throwing warmup', meta:'Throwing warmup · Section 1', steps:[
+        {text:'Arm circles — forward & backward, 10 each', dur:'1 min'},
+        {text:'Band pull-aparts — 15 reps', dur:'1 min'},
+        {text:'Band external rotation — 15 reps each arm', dur:'2 min'},
+        {text:'Wrist circles & finger stretches', dur:'1 min'},
+        {text:'Shoulder cross-body stretch — 30 sec each', dur:'1 min'},
+        {text:'Elbow flexion/extension warmup', dur:'1 min'},
+      ]},
+      { id:'plyo', icon:'⚾', title:'Plyo ball routine', meta:'Throwing warmup · Section 2', steps:[
+        {text:'Wall rebounds — 2-seam & 4-seam grip, 10 reps each', dur:'3 min'},
+        {text:'Reverse throws — 10 reps', dur:'2 min'},
+        {text:'Pivot pickoffs — 10 reps', dur:'2 min'},
+        {text:'Roll-ins — 10 reps each arm', dur:'2 min'},
+        {text:'Transition to regular throwing warmup', dur:'—'},
+      ]},
+      { id:'day-a', icon:'🏃', title:'Day A correctives', meta:'Movement prep · Section 1', steps:[
+        {text:'Placeholder — add your Day A correctives', dur:'—'},
+        {text:'Placeholder — exercise 2', dur:'—'},
+        {text:'Placeholder — exercise 3', dur:'—'},
+      ]},
+      { id:'day-b', icon:'🏃', title:'Day B correctives', meta:'Movement prep · Section 2', steps:[
+        {text:'Placeholder — add your Day B correctives', dur:'—'},
+        {text:'Placeholder — exercise 2', dur:'—'},
+        {text:'Placeholder — exercise 3', dur:'—'},
+      ]},
+      { id:'dynamic', icon:'🏃', title:'Dynamic warmup', meta:'Movement prep · Section 3', steps:[
+        {text:'High knees — 2 × 20 yards', dur:'1 min'},
+        {text:'Butt kicks — 2 × 20 yards', dur:'1 min'},
+        {text:'Lateral shuffles — 2 × 20 yards each direction', dur:'1 min'},
+        {text:'Carioca — 2 × 20 yards each direction', dur:'1 min'},
+        {text:'A-skips — 2 × 20 yards', dur:'1 min'},
+        {text:'Walking lunges with rotation — 10 reps', dur:'1 min'},
+        {text:'Leg swings — front/back & lateral, 10 each', dur:'1 min'},
+        {text:'Sprint build-ups — 3 × 30 yards at 50/75/90%', dur:'2 min'},
+      ]},
+    ],
+    lifting: [
+      { id:'lift-warmup', icon:'🏋️', title:'Lifting warmup', meta:'Before every session', steps:[
+        {text:"Foam roll — targeted to today's muscle groups", dur:'3 min'},
+        {text:'Hip 90/90 mobility — 60 sec each side', dur:'2 min'},
+        {text:'Band pull-aparts — 2 × 15', dur:'1 min'},
+        {text:'Glute activation — banded clamshells or walks, 2 × 15', dur:'2 min'},
+        {text:'Bodyweight squats or hip hinge warmup — 10 reps', dur:'1 min'},
+        {text:'Activation sets — 40–50% working weight, 2 × 5', dur:'2 min'},
+      ]},
+      { id:'lift-workout', icon:'🏋️', title:'Workout', meta:'Update with Next Era program', steps:[
+        {text:'Update with your Next Era lifting program', dur:'—'},
+        {text:'Add exercises, sets, reps, and weights here', dur:'—'},
+        {text:'Split into Day A / Day B if needed', dur:'—'},
+      ]},
+    ],
+  }
+};
+
+const ALL_IDS = [...DEFAULTS.daily.map(r=>r.id), ...Object.values(DEFAULTS.protocols).flat().map(r=>r.id)];
+
+let routineData={}, checks={}, openCards={}, editCards={}, reminders=[], reminderFilter='all', jumpTo=null, dragSrc=null;
+
+function load(){
+  try{routineData=JSON.parse(localStorage.getItem('lyfe_routines')||'{}');}catch{}
+  try{checks=JSON.parse(localStorage.getItem('lyfe_checks')||'{}');}catch{}
+  try{openCards=JSON.parse(localStorage.getItem('lyfe_open')||'{}');}catch{}
+  try{
+    const r=localStorage.getItem('lyfe_reminders');
+    if(r) reminders=JSON.parse(r);
+    else{
+      reminders=[
+        {id:1,text:'Register for FRCC class (May 26 start)',cat:'school',done:false},
+        {id:2,text:'Confirm Next Era training schedule',cat:'baseball',done:false},
+        {id:3,text:'Set up job search timeline',cat:'work',done:false},
+        {id:4,text:'Fill in Day A & Day B correctives',cat:'baseball',done:false},
+      ];
+      saveReminders();
+    }
+  }catch{}
+}
+
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch{}}
+function saveRoutines(){save('lyfe_routines',routineData);}
+function saveChecks(){save('lyfe_checks',checks);}
+function saveOpen(){save('lyfe_open',openCards);}
+function saveReminders(){save('lyfe_reminders',reminders);}
+
+function getRoutine(id){
+  if(routineData[id]) return routineData[id];
+  const all=[...DEFAULTS.daily,...Object.values(DEFAULTS.protocols).flat()];
+  const f=all.find(r=>r.id===id);
+  return f?JSON.parse(JSON.stringify(f)):null;
+}
+function setRoutine(id,r){routineData[id]=r;saveRoutines();}
+
+function showTab(t,el){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+t).classList.add('active');
+  el.classList.add('active');
+  if(t==='daily') renderDaily();
+  if(t==='protocols') renderProtocols();
+  if(t==='reminders') renderReminders();
+  updateMetrics();
+}
+
+function setToday(){
+  const d=new Date();
+  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('today-date').textContent=days[d.getDay()]+', '+months[d.getMonth()]+' '+d.getDate();
+  const isClass=d.getDay()===1||d.getDay()===3;
+  document.getElementById('today-sub').innerHTML=isClass
+    ?'Summer 2025 &nbsp;·&nbsp; <span style="color:var(--info);font-weight:500">FRCC class tonight 5:30–7:35 PM</span>'
+    :'Summer 2025';
+}
+
+function connectGCal(){
+  document.getElementById('gcal-area').innerHTML='<div class="gcal-connected">✓ Google Calendar connected</div>';
+  document.getElementById('gcal-card').style.display='block';
+}
+
+function updateMetrics(){
+  const done=ALL_IDS.filter(id=>{
+    const r=getRoutine(id);const c=checks[id]||[];
+    return c.length===r.steps.length&&r.steps.length>0&&c.every(Boolean);
+  }).length;
+  document.getElementById('m-routines').textContent=done+'/'+ALL_IDS.length;
+  document.getElementById('m-reminders').textContent=reminders.filter(r=>!r.done).length;
+}
+
+function renderDaily(){
+  const c=document.getElementById('daily-container');c.innerHTML='';
+  DEFAULTS.daily.forEach(r=>c.appendChild(buildCard(r.id)));
+}
+
+function renderProtocols(){
+  const c=document.getElementById('protocols-container');c.innerHTML='';
+  const secs=[
+    {key:'stretching',label:'Stretching'},
+    {key:'baseball',label:'Baseball',subs:{'pre-throw':'Throwing warmup','plyo':'Throwing warmup','day-a':'Movement prep','day-b':'Movement prep','dynamic':'Movement prep'}},
+    {key:'lifting',label:'Lifting'},
+  ];
+  secs.forEach(sec=>{
+    const lbl=document.createElement('div');lbl.className='sec-label';lbl.textContent=sec.label;c.appendChild(lbl);
+    let lastSub='';
+    DEFAULTS.protocols[sec.key].forEach(r=>{
+      if(sec.subs){
+        const sub=sec.subs[r.id]||'';
+        if(sub&&sub!==lastSub){
+          const sl=document.createElement('div');sl.className='sub-label';sl.textContent=sub;c.appendChild(sl);lastSub=sub;
+        }
+      }
+      const card=buildCard(r.id);card.id='card-'+r.id;c.appendChild(card);
+    });
+  });
+  if(jumpTo){
+    const el=document.getElementById('card-'+jumpTo);
+    if(el){
+      openCards[jumpTo]=true;saveOpen();
+      el.replaceWith(buildCardWithId(jumpTo));
+      setTimeout(()=>{const el2=document.getElementById('card-'+jumpTo);if(el2)el2.scrollIntoView({behavior:'smooth',block:'start'});},60);
+    }
+    jumpTo=null;
+  }
+}
+
+function buildCardWithId(id){const c=buildCard(id);c.id='card-'+id;return c;}
+
+function buildCard(id){
+  const r=getRoutine(id);
+  const isOpen=!!openCards[id],isEdit=!!editCards[id];
+  const sc=checks[id]||Array(r.steps.length).fill(false);
+  const done=sc.filter(Boolean).length;
+  const pct=r.steps.length?Math.round(done/r.steps.length*100):0;
+
+  const wrap=document.createElement('div');
+  wrap.className='rcard'+(isOpen?' open':'');
+  wrap.dataset.id=id;
+
+  const header=document.createElement('div');
+  header.className='rcard-header';
+  header.innerHTML=`<div style="display:flex;align-items:center;flex:1;min-width:0"><span class="rcard-icon">${r.icon}</span><div><div class="rcard-title">${r.title}</div><div class="rcard-meta">${r.meta} · ${done}/${r.steps.length} steps</div></div></div><span class="rcard-chevron">⌄</span>`;
+  header.onclick=()=>toggleOpen(id);
+  wrap.appendChild(header);
+
+  if(isOpen){
+    const pw=document.createElement('div');pw.className='prog-wrap';
+    const pb=document.createElement('div');pb.className='prog-bar';pb.style.width=pct+'%';
+    pw.appendChild(pb);wrap.appendChild(pw);
+
+    const list=document.createElement('div');
+    list.className='steps-list'+(isEdit?' edit-mode':'');
+    list.id='steps-'+id;
+
+    r.steps.forEach((s,i)=>{
+      const row=document.createElement('div');
+      row.className='step';row.draggable=isEdit;row.dataset.idx=i;
+
+      const handle=document.createElement('span');handle.className='drag-handle';handle.textContent='⠿';row.appendChild(handle);
+
+      const circle=document.createElement('div');
+      circle.className='step-circle'+(sc[i]?' checked':'');
+      circle.onclick=()=>toggleCheck(id,i);
+      row.appendChild(circle);
+
+      const body=document.createElement('div');body.className='step-body';
+
+      const textEl=document.createElement('div');
+      textEl.className='step-text'+(sc[i]?' done':'');
+      textEl.textContent=s.text;body.appendChild(textEl);
+
+      const textInput=document.createElement('textarea');
+      textInput.className='step-text-input';textInput.rows=1;textInput.value=s.text;
+      textInput.oninput=function(){this.style.height='auto';this.style.height=this.scrollHeight+'px';updateStepText(id,i,this.value);};
+      body.appendChild(textInput);
+
+      const durEl=document.createElement('div');durEl.className='step-dur';durEl.textContent=s.dur||'';body.appendChild(durEl);
+
+      const durInput=document.createElement('input');
+      durInput.className='step-dur-input';durInput.value=s.dur||'';durInput.placeholder='duration';
+      durInput.onchange=()=>updateStepDur(id,i,durInput.value);
+      body.appendChild(durInput);
+
+      if(s.link&&!isEdit){
+        const lb=document.createElement('button');lb.className='step-link';
+        lb.textContent='→ '+(s.linkLabel||'');
+        lb.onclick=(e)=>{e.stopPropagation();jumpToProtocol(s.link);};
+        body.appendChild(lb);
+      }
+      row.appendChild(body);
+
+      const del=document.createElement('button');del.className='step-del';del.textContent='×';
+      del.onclick=(e)=>{e.stopPropagation();deleteStep(id,i);};
+      row.appendChild(del);
+
+      row.addEventListener('dragstart',e=>{dragSrc=i;row.style.opacity='.4';e.dataTransfer.effectAllowed='move';});
+      row.addEventListener('dragend',()=>{row.style.opacity='1';list.querySelectorAll('.step').forEach(r=>r.classList.remove('drag-over'));});
+      row.addEventListener('dragover',e=>{e.preventDefault();list.querySelectorAll('.step').forEach(r=>r.classList.remove('drag-over'));row.classList.add('drag-over');});
+      row.addEventListener('drop',e=>{e.preventDefault();row.classList.remove('drag-over');if(dragSrc!==null&&dragSrc!==i){moveStep(id,dragSrc,i);dragSrc=null;}});
+
+      list.appendChild(row);
+    });
+    wrap.appendChild(list);
+
+    const addBtn=document.createElement('button');addBtn.className='add-step-btn';addBtn.textContent='+ Add step';
+    addBtn.onclick=()=>addStep(id);if(isEdit)addBtn.style.display='block';
+    wrap.appendChild(addBtn);
+
+    const footer=document.createElement('div');footer.className='card-footer';
+    const resetBtn=document.createElement('button');resetBtn.className='reset-btn';resetBtn.textContent='↺ Reset';
+    resetBtn.onclick=(e)=>{e.stopPropagation();resetChecks(id);};
+    const editBtn=document.createElement('button');editBtn.className='edit-btn'+(isEdit?' on':'');
+    editBtn.textContent=isEdit?'✓ Done':'✏ Edit';
+    editBtn.onclick=(e)=>{e.stopPropagation();toggleEdit(id);};
+    footer.appendChild(resetBtn);footer.appendChild(editBtn);wrap.appendChild(footer);
+  }
+  return wrap;
+}
+
+function reRender(id){
+  const ex=document.querySelector('.rcard[data-id="'+id+'"]')||document.getElementById('card-'+id);
+  if(!ex)return;const nc=buildCard(id);nc.id='card-'+id;ex.replaceWith(nc);updateMetrics();
+}
+
+function toggleOpen(id){openCards[id]=!openCards[id];saveOpen();reRender(id);}
+function toggleEdit(id){editCards[id]=!editCards[id];reRender(id);}
+function toggleCheck(id,i){
+  const r=getRoutine(id);
+  if(!checks[id])checks[id]=Array(r.steps.length).fill(false);
+  checks[id][i]=!checks[id][i];saveChecks();reRender(id);updateMetrics();
+}
+function resetChecks(id){const r=getRoutine(id);checks[id]=Array(r.steps.length).fill(false);saveChecks();reRender(id);updateMetrics();}
+function updateStepText(id,i,val){const r=getRoutine(id);r.steps[i].text=val;setRoutine(id,r);}
+function updateStepDur(id,i,val){const r=getRoutine(id);r.steps[i].dur=val;setRoutine(id,r);}
+function deleteStep(id,i){const r=getRoutine(id);r.steps.splice(i,1);if(checks[id])checks[id].splice(i,1);setRoutine(id,r);saveChecks();reRender(id);}
+function addStep(id){const r=getRoutine(id);r.steps.push({text:'New step',dur:'—'});setRoutine(id,r);reRender(id);}
+function moveStep(id,from,to){
+  const r=getRoutine(id);const[mv]=r.steps.splice(from,1);r.steps.splice(to,0,mv);
+  if(checks[id]){const c=checks[id];const[mc]=c.splice(from,1);c.splice(to,0,mc);}
+  setRoutine(id,r);saveChecks();reRender(id);
+}
+function jumpToProtocol(id){jumpTo=id;showTab('protocols',document.getElementById('nav-protocols'));}
+
+const CAT_TAGS={baseball:'tag-baseball',school:'tag-class',health:'tag-routine',work:'tag-daily',general:'tag-daily'};
+
+function renderReminders(){
+  const pills=document.getElementById('filter-pills');pills.innerHTML='';
+  ['all','general','baseball','school','health','work'].forEach(f=>{
+    const p=document.createElement('button');p.className='fpill'+(reminderFilter===f?' on':'');p.textContent=f;
+    p.onclick=()=>{reminderFilter=f;renderReminders();};pills.appendChild(p);
+  });
+  const list=document.getElementById('remind-list');
+  const filtered=reminderFilter==='all'?reminders:reminders.filter(r=>r.cat===reminderFilter);
+  if(!filtered.length){list.innerHTML='<div class="empty">No reminders here yet</div>';return;}
+  list.innerHTML='';
+  filtered.forEach(r=>{
+    const row=document.createElement('div');row.className='remind-item';
+    row.innerHTML=`<div class="rcheck${r.done?' done':''}" onclick="toggleReminder(${r.id})"></div><span class="remind-text${r.done?' done':''}">${r.text}</span><span class="tag ${CAT_TAGS[r.cat]||'tag-daily'}" style="font-size:11px">${r.cat}</span><button class="remind-del" onclick="deleteReminder(${r.id})">×</button>`;
+    list.appendChild(row);
+  });
+  updateMetrics();
+}
+
+function addReminder(){
+  const inp=document.getElementById('remind-input');const cat=document.getElementById('remind-cat').value;
+  const text=inp.value.trim();if(!text)return;
+  reminders.unshift({id:Date.now(),text,cat,done:false});inp.value='';
+  saveReminders();renderReminders();updateMetrics();
+}
+function toggleReminder(id){const r=reminders.find(r=>r.id===id);if(r)r.done=!r.done;saveReminders();renderReminders();updateMetrics();}
+function deleteReminder(id){reminders=reminders.filter(r=>r.id!==id);saveReminders();renderReminders();updateMetrics();}
+
+// Register service worker for offline support
+if('serviceWorker' in navigator){
+  const sw=`
+    const CACHE='mylyfe-v1';
+    const ASSETS=[self.location.href];
+    self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS))));
+    self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(res=>{const clone=res.clone();caches.open(CACHE).then(c=>c.put(e.request,clone));return res;}))));
+  `;
+  const blob=new Blob([sw],{type:'application/javascript'});
+  const url=URL.createObjectURL(blob);
+  navigator.serviceWorker.register(url).catch(()=>{});
+}
+
+load();setToday();updateMetrics();
+</script>
+</body>
+</html>
