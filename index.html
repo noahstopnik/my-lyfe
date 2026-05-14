@@ -231,7 +231,7 @@
       <div class="srow"><span class="srow-time">Morning</span><span class="srow-label">Walk Maximus</span><span class="tag tag-daily">daily</span></div>
       <div class="srow"><span class="srow-time">Daytime</span><span class="srow-label">Next Era training (when scheduled)</span><span class="tag tag-baseball">baseball</span></div>
       <div class="srow"><span class="srow-time">5:30–7:35</span><span class="srow-label">FRCC class — Mon & Wed (May 26–Aug 3)</span><span class="tag tag-class">class</span></div>
-      <div class="srow"><span class="srow-time">10:30 PM</span><span class="srow-label">Nightly stretching → Bedtime routine</span><span class="tag tag-routine">routine</span></div>
+      <div class="srow" id="bedtime-srow"><span class="srow-time" id="bedtime-srow-time">10:30 PM</span><span class="srow-label">Nightly stretching → Bedtime routine</span><span class="tag tag-routine">routine</span></div>
     </div>
   </div>
 
@@ -463,6 +463,7 @@ async function fetchEvents(){
     const data=await res.json();
     gcalEvents=data.items||[];
     renderEventsList();
+    computeBedtime();
     document.getElementById('m-events').textContent=gcalEvents.length||'0';
   }catch(e){
     c.innerHTML='<div class="events-empty"><div class="events-empty-title">Couldn\'t load events</div><div class="events-empty-sub">Check your connection and try refreshing.</div></div>';
@@ -504,6 +505,68 @@ function toggleEventsPanel(){
     if(gcalToken)fetchEvents();
     else renderEventsPanel();
   }
+}
+
+// ── DYNAMIC BEDTIME ───────────────────────────────────────────
+function computeBedtime(){
+  // Default: stretching 10:30 PM, routine 11:00 PM
+  const DEFAULT_STRETCH_H=22,DEFAULT_STRETCH_M=30;
+
+  if(!gcalEvents||!gcalEvents.length){
+    updateBedtimeDisplay(DEFAULT_STRETCH_H,DEFAULT_STRETCH_M);
+    return;
+  }
+
+  // Find the latest event end time today
+  let latestEnd=null;
+  gcalEvents.forEach(ev=>{
+    const endStr=ev.end&&(ev.end.dateTime||ev.end.date);
+    if(!endStr)return;
+    const end=new Date(endStr);
+    if(!latestEnd||end>latestEnd)latestEnd=end;
+  });
+
+  if(!latestEnd){updateBedtimeDisplay(DEFAULT_STRETCH_H,DEFAULT_STRETCH_M);return;}
+
+  // Add 30 minutes for stretching start
+  const stretchStart=new Date(latestEnd.getTime()+30*60*1000);
+  const sh=stretchStart.getHours(),sm=stretchStart.getMinutes();
+
+  // Only shift if later than default
+  if(sh>DEFAULT_STRETCH_H||(sh===DEFAULT_STRETCH_H&&sm>DEFAULT_STRETCH_M)){
+    updateBedtimeDisplay(sh,sm);
+  } else {
+    updateBedtimeDisplay(DEFAULT_STRETCH_H,DEFAULT_STRETCH_M);
+  }
+}
+
+function updateBedtimeDisplay(h,m){
+  const ampm=h>=12?'PM':'AM';
+  const h12=h%12||12;
+  const mStr=m.toString().padStart(2,'0');
+  const timeStr=h12+':'+(mStr==='00'?'00':mStr)+' '+ampm;
+
+  // Update Day at a glance row
+  const el=document.getElementById('bedtime-srow-time');
+  if(el)el.textContent=timeStr;
+
+  // Update the bedtime routine card meta if it's rendered
+  const routineH=h+Math.floor((m+20)/60);
+  const routineM=(m+20)%60;
+  const rAmpm=routineH>=12?'PM':'AM';
+  const rH12=routineH%12||12;
+  const rMStr=routineM.toString().padStart(2,'0');
+  const routineTime=rH12+':'+(rMStr==='00'?'00':rMStr)+' '+rAmpm;
+
+  // Patch the in-memory routine meta so card renders correctly
+  if(!routineData['nightly-stretch'])routineData['nightly-stretch']=JSON.parse(JSON.stringify(getRoutine('nightly-stretch')));
+  routineData['nightly-stretch'].meta='~20 min · '+timeStr;
+  if(!routineData['bedtime'])routineData['bedtime']=JSON.parse(JSON.stringify(getRoutine('bedtime')));
+  routineData['bedtime'].meta='~30 min · '+routineTime;
+
+  // Re-render cards if they're open
+  reRender('nightly-stretch');
+  reRender('bedtime');
 }
 
 function renderEventsPanel(){
