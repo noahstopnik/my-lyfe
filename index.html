@@ -14,25 +14,22 @@
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet"/>
 <style>
   :root {
-    --bg: #f9f8f6; --surface: #ffffff; --border: #e8e5e0; --border-light: #f0ede8;
-    --text: #1a1916; --text-2: #6b6760; --text-3: #a8a49e;
-    --accent: #2d5a3d; --accent-light: #e8f0eb; --accent-text: #1e3d2a;
-    --warn: #7a4f1a; --warn-light: #fdf0e0;
-    --info: #1a3a5c; --info-light: #e4eef8;
-    --danger: #8b2020; --water: #2563a8; --water-light: #dbeafe;
-    --radius: 14px; --radius-sm: 8px;
-    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-    --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
-    --safe-top: env(safe-area-inset-top,0px); --safe-bottom: env(safe-area-inset-bottom,0px);
+    --bg:#f9f8f6;--surface:#ffffff;--border:#e8e5e0;--border-light:#f0ede8;
+    --text:#1a1916;--text-2:#6b6760;--text-3:#a8a49e;
+    --accent:#2d5a3d;--accent-light:#e8f0eb;--accent-text:#1e3d2a;
+    --warn:#7a4f1a;--warn-light:#fdf0e0;--info:#1a3a5c;--info-light:#e4eef8;
+    --danger:#8b2020;--water:#2563a8;--water-light:#dbeafe;
+    --radius:14px;--radius-sm:8px;
+    --shadow:0 1px 3px rgba(0,0,0,0.06),0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md:0 4px 12px rgba(0,0,0,0.08),0 2px 4px rgba(0,0,0,0.04);
+    --safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px);
   }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg:#111110; --surface:#1c1b19; --border:#2e2c29; --border-light:#252422;
-      --text:#f0ede8; --text-2:#8a877f; --text-3:#5a5750;
-      --accent:#4a9e6a; --accent-light:#1a2e20; --accent-text:#7dd4a0;
-      --warn:#c8872a; --warn-light:#2a1f0e; --info:#4a82c8; --info-light:#0e1a2a;
-      --danger:#e05555; --water:#4a90d9; --water-light:#0e1e35;
-    }
+  @media(prefers-color-scheme:dark){
+    :root{--bg:#111110;--surface:#1c1b19;--border:#2e2c29;--border-light:#252422;
+    --text:#f0ede8;--text-2:#8a877f;--text-3:#5a5750;
+    --accent:#4a9e6a;--accent-light:#1a2e20;--accent-text:#7dd4a0;
+    --warn:#c8872a;--warn-light:#2a1f0e;--info:#4a82c8;--info-light:#0e1a2a;
+    --danger:#e05555;--water:#4a90d9;--water-light:#0e1e35;}
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
   html{height:100%;}
@@ -45,30 +42,25 @@
   .nav-btn.active{color:var(--text);border-bottom-color:var(--text);}
   .nav-btn:hover:not(.active){color:var(--text-2);}
   .content{flex:1;overflow-y:auto;padding:20px 16px;padding-bottom:calc(24px + var(--safe-bottom));-webkit-overflow-scrolling:touch;}
-  .section{display:none;animation:fadeIn .18s ease;}
-  .section.active{display:block;}
+  .section{display:none;animation:fadeIn .18s ease;}.section.active{display:block;}
   @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
 
-  /* METRICS */
   .metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
   .metric{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 12px;box-shadow:var(--shadow);cursor:pointer;transition:transform .12s,box-shadow .12s;user-select:none;-webkit-user-select:none;}
   .metric:active{transform:scale(.97);box-shadow:none;}
   .metric-val{font-family:'Instrument Serif',serif;font-size:24px;font-weight:400;color:var(--text);}
   .metric-lbl{font-size:11px;color:var(--text-3);margin-top:2px;letter-spacing:.02em;text-transform:uppercase;}
   .metric.water-card{border-color:var(--water);background:var(--water-light);}
-  .metric.water-card .metric-val{color:var(--water);}
-  .metric.water-card .metric-lbl{color:var(--water);}
+  .metric.water-card .metric-val,.metric.water-card .metric-lbl{color:var(--water);}
 
-  /* TODAY HEADER */
   .today-header{margin-bottom:20px;}
   .today-date{font-family:'Instrument Serif',serif;font-size:26px;font-weight:400;line-height:1.2;}
   .today-sub{font-size:13px;color:var(--text-2);margin-top:4px;}
 
-  /* CARDS */
   .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:12px;box-shadow:var(--shadow);overflow:hidden;}
   .card-head{padding:14px 16px;font-size:11px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid var(--border-light);}
 
-  /* WATER TRACKER */
+  /* WATER */
   .water-section{background:var(--surface);border:1px solid var(--water);border-radius:var(--radius);margin-bottom:12px;box-shadow:var(--shadow);overflow:hidden;}
   .water-head{padding:14px 16px 10px;display:flex;align-items:center;justify-content:space-between;}
   .water-title{font-size:15px;font-weight:600;color:var(--text);}
@@ -83,11 +75,10 @@
   .water-add{flex:1;background:var(--water);color:#fff;border:none;border-radius:var(--radius-sm);padding:11px;font-family:inherit;font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;}
   .water-add:active{opacity:.85;}
   .water-reset{background:none;border:1px solid var(--border);color:var(--text-3);border-radius:var(--radius-sm);padding:11px 16px;font-family:inherit;font-size:13px;cursor:pointer;}
-  .water-reset:active{background:var(--border-light);}
   .water-bar-wrap{height:6px;background:var(--border);margin:0 16px 14px;border-radius:3px;}
   .water-bar{height:6px;background:var(--water);border-radius:3px;transition:width .3s;}
 
-  /* SCHEDULE ROWS */
+  /* SCHEDULE */
   .srow{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border-light);}
   .srow:last-child{border-bottom:none;}
   .srow-time{font-size:12px;color:var(--text-3);min-width:68px;flex-shrink:0;}
@@ -98,13 +89,22 @@
   .tag-baseball{background:var(--warn-light);color:var(--warn);}
   .tag-daily{background:var(--border-light);color:var(--text-2);}
 
-  /* EVENTS PANEL */
+  /* EVENTS */
   .events-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:12px;box-shadow:var(--shadow);overflow:hidden;}
   .events-empty{padding:28px 16px;text-align:center;}
   .events-empty-title{font-size:16px;font-weight:500;color:var(--text);margin-bottom:6px;}
   .events-empty-sub{font-size:13px;color:var(--text-3);line-height:1.5;}
+  .event-row{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border-light);}
+  .event-row:last-child{border-bottom:none;}
+  .event-time{font-size:12px;color:var(--text-3);min-width:72px;flex-shrink:0;padding-top:2px;}
+  .event-info{flex:1;}
+  .event-title{font-size:14px;color:var(--text);font-weight:500;}
+  .event-cal{font-size:11px;color:var(--text-3);margin-top:2px;}
+  .event-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px;}
   .gcal-btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);background:var(--surface);color:var(--text-2);padding:8px 14px;border-radius:20px;font-size:13px;cursor:pointer;font-family:inherit;font-weight:500;margin-top:10px;}
+  .gcal-btn:active{background:var(--border-light);}
   .gcal-connected{font-size:13px;color:var(--accent);display:flex;align-items:center;gap:5px;margin-top:10px;font-weight:500;}
+  .gcal-loading{padding:20px 16px;text-align:center;font-size:13px;color:var(--text-3);}
 
   /* ROUTINE CARDS */
   .rcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:12px;box-shadow:var(--shadow);overflow:hidden;transition:box-shadow .2s;}
@@ -141,12 +141,11 @@
   .edit-mode .step-link{display:none;}
   .step-text-input{font-size:14px;color:var(--text);font-family:inherit;border:1px solid var(--border);border-radius:6px;background:var(--bg);padding:5px 8px;width:100%;outline:none;line-height:1.5;display:none;resize:none;overflow:hidden;}
   .step-dur-input{font-size:12px;color:var(--text-2);font-family:inherit;border:1px solid var(--border);border-radius:5px;background:var(--bg);padding:3px 6px;width:90px;outline:none;margin-top:4px;display:none;}
-  .edit-mode .step-text-input{display:block;}
-  .edit-mode .step-dur-input{display:block;}
+  .edit-mode .step-text-input,.edit-mode .step-dur-input{display:block;}
   .step-text-input:focus,.step-dur-input:focus{border-color:var(--accent);}
   .card-footer{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-top:1px solid var(--border-light);}
   .reset-btn{font-size:12px;color:var(--text-3);background:none;border:none;cursor:pointer;font-family:inherit;padding:4px 0;}
-  .edit-btn{font-size:12px;border:1px solid var(--border);background:none;color:var(--text-2);padding:5px 12px;border-radius:20px;cursor:pointer;font-family:inherit;font-weight:500;transition:all .15s;}
+  .edit-btn{font-size:12px;border:1px solid var(--border);background:none;color:var(--text-2);padding:5px 12px;border-radius:20px;cursor:pointer;font-family:inherit;font-weight:500;}
   .edit-btn.on{background:var(--accent-light);border-color:var(--accent);color:var(--accent-text);}
   .add-step-btn{display:none;margin:8px 16px 12px;padding:9px;border:1.5px dashed var(--border);border-radius:var(--radius-sm);background:none;color:var(--text-3);font-family:inherit;font-size:13px;cursor:pointer;width:calc(100% - 32px);text-align:center;}
   .add-step-btn:active{background:var(--border-light);}
@@ -197,11 +196,10 @@
       <div class="today-date" id="today-date"></div>
       <div class="today-sub" id="today-sub"></div>
       <div id="gcal-area">
-        <button class="gcal-btn" onclick="connectGCal()">🗓 Connect Google Calendar</button>
+        <button class="gcal-btn" id="gcal-signin-btn" onclick="signInGoogle()">🗓 Connect Google Calendar</button>
       </div>
     </div>
 
-    <!-- METRICS -->
     <div class="metrics">
       <div class="metric water-card" onclick="scrollToWater()">
         <div class="metric-val" id="m-water">0/12</div>
@@ -219,11 +217,14 @@
 
     <!-- EVENTS PANEL -->
     <div class="events-panel" id="events-panel" style="display:none">
-      <div class="card-head">Today's events</div>
+      <div class="card-head" style="display:flex;align-items:center;justify-content:space-between">
+        <span>Today's events</span>
+        <button onclick="refreshEvents()" style="background:none;border:none;cursor:pointer;font-size:13px;color:var(--text-3);font-family:inherit;">↻ Refresh</button>
+      </div>
       <div id="events-content"></div>
     </div>
 
-    <!-- SCHEDULE -->
+    <!-- DAY AT A GLANCE -->
     <div class="card">
       <div class="card-head">Day at a glance</div>
       <div class="srow"><span class="srow-time">8:00 AM</span><span class="srow-label">Wake up · Morning routine</span><span class="tag tag-routine">routine</span></div>
@@ -236,7 +237,6 @@
 
   <!-- DAILY -->
   <div id="tab-daily" class="section">
-    <!-- WATER TRACKER -->
     <div class="water-section" id="water-tracker">
       <div class="water-head">
         <div>
@@ -279,7 +279,12 @@
 
 </div>
 
+<!-- Google Identity Services -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
 <script>
+const CLIENT_ID = '988859770824-a2p0b94r9j7eank9iqs3ao001btk5c8e.apps.googleusercontent.com';
+const SCOPES = 'https://www.googleapis.com/auth/calendar.readonly';
 const WATER_GOAL = 12;
 const EXPLORE_QUOTES = [
   "No plans — the whole day is yours. Make it count. 🌤",
@@ -312,18 +317,16 @@ const DEFAULTS = {
     ]},
   ],
   protocols:{
-    stretching:[
-      {id:'nightly-stretch',icon:'🧘',title:'Nightly stretching',meta:'~20 min · 10:30 PM',steps:[
-        {text:'Foam roll — quads, hamstrings, IT band, upper back',dur:'4 min'},
-        {text:'Hip flexor stretch — 60 sec each side',dur:'2 min'},
-        {text:'Pigeon pose or figure-4 — 60 sec each side',dur:'2 min'},
-        {text:'Hamstring stretch — 60 sec each side',dur:'2 min'},
-        {text:'Doorway chest & shoulder opener',dur:'1 min'},
-        {text:'Thoracic rotation — 10 reps each side',dur:'2 min'},
-        {text:"Cat-cow + child's pose",dur:'2 min'},
-        {text:'5 slow deep breaths to close out',dur:'1 min'},
-      ]},
-    ],
+    stretching:[{id:'nightly-stretch',icon:'🧘',title:'Nightly stretching',meta:'~20 min · 10:30 PM',steps:[
+      {text:'Foam roll — quads, hamstrings, IT band, upper back',dur:'4 min'},
+      {text:'Hip flexor stretch — 60 sec each side',dur:'2 min'},
+      {text:'Pigeon pose or figure-4 — 60 sec each side',dur:'2 min'},
+      {text:'Hamstring stretch — 60 sec each side',dur:'2 min'},
+      {text:'Doorway chest & shoulder opener',dur:'1 min'},
+      {text:'Thoracic rotation — 10 reps each side',dur:'2 min'},
+      {text:"Cat-cow + child's pose",dur:'2 min'},
+      {text:'5 slow deep breaths to close out',dur:'1 min'},
+    ]}],
     baseball:[
       {id:'pre-throw',icon:'⚾',title:'Pre-throwing warmup',meta:'Throwing warmup · Section 1',steps:[
         {text:'Arm circles — forward & backward, 10 each',dur:'1 min'},
@@ -379,8 +382,10 @@ const DEFAULTS = {
   }
 };
 
+// ── STATE ─────────────────────────────────────────────────────
 let routineData={},checks={},openCards={},editCards={},reminders=[],reminderFilter='all',jumpTo=null,dragSrc=null;
-let waterCount=0,eventsPanelOpen=false,gcalConnected=false;
+let waterCount=0,eventsPanelOpen=false;
+let gcalToken=null,gcalEvents=[];
 
 function todayKey(){const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();}
 
@@ -388,11 +393,8 @@ function load(){
   try{routineData=JSON.parse(localStorage.getItem('lyfe_routines')||'{}');}catch{}
   try{checks=JSON.parse(localStorage.getItem('lyfe_checks')||'{}');}catch{}
   try{openCards=JSON.parse(localStorage.getItem('lyfe_open')||'{}');}catch{}
-  // Water: reset each day
-  try{
-    const wd=JSON.parse(localStorage.getItem('lyfe_water')||'{}');
-    waterCount=(wd.date===todayKey())?wd.count:0;
-  }catch{}
+  try{const wd=JSON.parse(localStorage.getItem('lyfe_water')||'{}');waterCount=(wd.date===todayKey())?wd.count:0;}catch{}
+  try{gcalToken=localStorage.getItem('lyfe_gcal_token')||null;}catch{}
   try{
     const r=localStorage.getItem('lyfe_reminders');
     if(r)reminders=JSON.parse(r);
@@ -423,70 +425,123 @@ function getRoutine(id){
 }
 function setRoutine(id,r){routineData[id]=r;saveRoutines();}
 
-// ── WATER ──────────────────────────────────────────────────────
+// ── GOOGLE CALENDAR ───────────────────────────────────────────
+function signInGoogle(){
+  const client=google.accounts.oauth2.initTokenClient({
+    client_id:CLIENT_ID,
+    scope:SCOPES,
+    callback:(response)=>{
+      if(response.access_token){
+        gcalToken=response.access_token;
+        try{localStorage.setItem('lyfe_gcal_token',gcalToken);}catch{}
+        document.getElementById('gcal-area').innerHTML='<div class="gcal-connected">✓ Google Calendar connected</div>';
+        if(eventsPanelOpen)fetchEvents();
+      }
+    },
+  });
+  client.requestAccessToken();
+}
+
+async function fetchEvents(){
+  if(!gcalToken){renderEventsPanel();return;}
+  const c=document.getElementById('events-content');
+  c.innerHTML='<div class="gcal-loading">Loading your events…</div>';
+  const now=new Date();
+  const startOfDay=new Date(now.getFullYear(),now.getMonth(),now.getDate()).toISOString();
+  const endOfDay=new Date(now.getFullYear(),now.getMonth(),now.getDate(),23,59,59).toISOString();
+  try{
+    const res=await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${startOfDay}&timeMax=${endOfDay}&singleEvents=true&orderBy=startTime&maxResults=20`,{
+      headers:{Authorization:'Bearer '+gcalToken}
+    });
+    if(res.status===401){
+      // Token expired — prompt re-auth
+      gcalToken=null;localStorage.removeItem('lyfe_gcal_token');
+      document.getElementById('gcal-area').innerHTML='<button class="gcal-btn" onclick="signInGoogle()">🗓 Reconnect Google Calendar</button>';
+      c.innerHTML='<div class="events-empty"><div class="events-empty-title">Session expired</div><div class="events-empty-sub">Tap reconnect above to sign back in.</div></div>';
+      return;
+    }
+    const data=await res.json();
+    gcalEvents=data.items||[];
+    renderEventsList();
+    document.getElementById('m-events').textContent=gcalEvents.length||'0';
+  }catch(e){
+    c.innerHTML='<div class="events-empty"><div class="events-empty-title">Couldn\'t load events</div><div class="events-empty-sub">Check your connection and try refreshing.</div></div>';
+  }
+}
+
+function renderEventsList(){
+  const c=document.getElementById('events-content');
+  if(!gcalEvents.length){
+    const q=EXPLORE_QUOTES[new Date().getDay()%EXPLORE_QUOTES.length];
+    c.innerHTML=`<div class="events-empty"><div class="events-empty-title">No events today</div><div class="events-empty-sub">${q}</div></div>`;
+    return;
+  }
+  c.innerHTML='';
+  gcalEvents.forEach(ev=>{
+    const row=document.createElement('div');row.className='event-row';
+    let timeStr='All day';
+    if(ev.start&&ev.start.dateTime){
+      const t=new Date(ev.start.dateTime);
+      timeStr=t.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});
+    }
+    const color=ev.colorId?`hsl(${parseInt(ev.colorId)*37},60%,55%)`:'var(--accent)';
+    row.innerHTML=`
+      <div class="event-dot" style="background:${color}"></div>
+      <div class="event-info">
+        <div class="event-title">${ev.summary||'(No title)'}</div>
+        <div class="event-cal">${ev.organizer?.displayName||'My Calendar'}</div>
+      </div>
+      <div class="event-time">${timeStr}</div>`;
+    c.appendChild(row);
+  });
+}
+
+function toggleEventsPanel(){
+  eventsPanelOpen=!eventsPanelOpen;
+  const panel=document.getElementById('events-panel');
+  panel.style.display=eventsPanelOpen?'block':'none';
+  if(eventsPanelOpen){
+    if(gcalToken)fetchEvents();
+    else renderEventsPanel();
+  }
+}
+
+function renderEventsPanel(){
+  const c=document.getElementById('events-content');
+  const q=EXPLORE_QUOTES[new Date().getDay()%EXPLORE_QUOTES.length];
+  c.innerHTML=`<div class="events-empty">
+    <div class="events-empty-title">No events planned today</div>
+    <div class="events-empty-sub">${q}</div>
+  </div>`;
+}
+
+function refreshEvents(){if(gcalToken)fetchEvents();else signInGoogle();}
+
+// ── WATER ─────────────────────────────────────────────────────
 function renderWater(){
   const pct=Math.min(100,Math.round(waterCount/WATER_GOAL*100));
   document.getElementById('m-water').textContent=waterCount+'/'+WATER_GOAL;
   document.getElementById('water-big').textContent=waterCount;
   document.getElementById('water-sub-text').textContent=waterCount+' of '+WATER_GOAL+' glasses today'+(waterCount>=WATER_GOAL?' 🎉':'');
   document.getElementById('water-bar').style.width=pct+'%';
-  const grid=document.getElementById('water-glasses');
-  if(!grid)return;
-  grid.innerHTML='';
+  const grid=document.getElementById('water-glasses');if(!grid)return;grid.innerHTML='';
   for(let i=0;i<WATER_GOAL;i++){
-    const g=document.createElement('div');
-    g.className='glass'+(i<waterCount?' filled':'');
-    const fill=document.createElement('div');
-    fill.className='glass-fill';
-    fill.style.height=i<waterCount?'75%':'0%';
-    const em=document.createElement('div');
-    em.className='glass-emoji';
-    em.textContent=i<waterCount?'💧':'🥛';
+    const g=document.createElement('div');g.className='glass'+(i<waterCount?' filled':'');
+    const fill=document.createElement('div');fill.className='glass-fill';fill.style.height=i<waterCount?'75%':'0%';
+    const em=document.createElement('div');em.className='glass-emoji';em.textContent=i<waterCount?'💧':'🥛';
     g.appendChild(fill);g.appendChild(em);
     g.onclick=()=>{waterCount=i+1;saveWater();renderWater();};
     grid.appendChild(g);
   }
 }
-
-function addWater(){
-  if(waterCount<WATER_GOAL)waterCount++;
-  saveWater();renderWater();
-}
+function addWater(){if(waterCount<WATER_GOAL)waterCount++;saveWater();renderWater();}
 function resetWater(){waterCount=0;saveWater();renderWater();}
 function scrollToWater(){
   showTab('daily',document.querySelectorAll('.nav-btn')[1]);
   setTimeout(()=>{const el=document.getElementById('water-tracker');if(el)el.scrollIntoView({behavior:'smooth',block:'start'});},80);
 }
 
-// ── EVENTS PANEL ───────────────────────────────────────────────
-function toggleEventsPanel(){
-  eventsPanelOpen=!eventsPanelOpen;
-  const panel=document.getElementById('events-panel');
-  panel.style.display=eventsPanelOpen?'block':'none';
-  if(eventsPanelOpen) renderEventsPanel();
-}
-
-function renderEventsPanel(){
-  const c=document.getElementById('events-content');
-  if(gcalConnected){
-    c.innerHTML='<div class="srow" style="color:var(--text-3);font-size:13px;padding:14px 16px">Authorize Google Calendar in your browser to pull live events here.</div>';
-  } else {
-    const q=EXPLORE_QUOTES[new Date().getDay()%EXPLORE_QUOTES.length];
-    c.innerHTML=`<div class="events-empty">
-      <div class="events-empty-title">No events planned today</div>
-      <div class="events-empty-sub">${q}</div>
-      <button class="gcal-btn" onclick="connectGCal()" style="margin-top:14px">🗓 Connect Google Calendar</button>
-    </div>`;
-  }
-}
-
-function connectGCal(){
-  gcalConnected=true;
-  document.getElementById('gcal-area').innerHTML='<div class="gcal-connected">✓ Google Calendar connected</div>';
-  if(eventsPanelOpen)renderEventsPanel();
-}
-
-// ── TABS ───────────────────────────────────────────────────────
+// ── TABS ──────────────────────────────────────────────────────
 function showTab(t,el){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
@@ -507,18 +562,19 @@ function setToday(){
   document.getElementById('today-sub').innerHTML=isClass
     ?'Summer 2025 &nbsp;·&nbsp; <span style="color:var(--info);font-weight:500">FRCC class tonight 5:30–7:35 PM</span>'
     :'Summer 2025';
+  if(gcalToken){
+    document.getElementById('gcal-area').innerHTML='<div class="gcal-connected">✓ Google Calendar connected</div>';
+  }
 }
 
 function updateMetrics(){
   document.getElementById('m-water').textContent=waterCount+'/'+WATER_GOAL;
   document.getElementById('m-reminders').textContent=reminders.filter(r=>!r.done).length;
+  if(gcalToken&&gcalEvents.length)document.getElementById('m-events').textContent=gcalEvents.length;
 }
 
-// ── ROUTINES ───────────────────────────────────────────────────
-function renderDaily(){
-  const c=document.getElementById('daily-container');c.innerHTML='';
-  DEFAULTS.daily.forEach(r=>c.appendChild(buildCard(r.id)));
-}
+// ── ROUTINES ──────────────────────────────────────────────────
+function renderDaily(){const c=document.getElementById('daily-container');c.innerHTML='';DEFAULTS.daily.forEach(r=>c.appendChild(buildCard(r.id)));}
 
 function renderProtocols(){
   const c=document.getElementById('protocols-container');c.innerHTML='';
@@ -550,14 +606,10 @@ function buildCard(id){
   const sc=checks[id]||Array(r.steps.length).fill(false);
   const done=sc.filter(Boolean).length;
   const pct=r.steps.length?Math.round(done/r.steps.length*100):0;
-
-  const wrap=document.createElement('div');
-  wrap.className='rcard'+(isOpen?' open':'');wrap.dataset.id=id;
-
+  const wrap=document.createElement('div');wrap.className='rcard'+(isOpen?' open':'');wrap.dataset.id=id;
   const header=document.createElement('div');header.className='rcard-header';
   header.innerHTML=`<div style="display:flex;align-items:center;flex:1;min-width:0"><span class="rcard-icon">${r.icon}</span><div><div class="rcard-title">${r.title}</div><div class="rcard-meta">${r.meta} · ${done}/${r.steps.length} steps</div></div></div><span class="rcard-chevron">⌄</span>`;
   header.onclick=()=>toggleOpen(id);wrap.appendChild(header);
-
   if(isOpen){
     const pw=document.createElement('div');pw.className='prog-wrap';
     const pb=document.createElement('div');pb.className='prog-bar';pb.style.width=pct+'%';
@@ -569,10 +621,9 @@ function buildCard(id){
       const circle=document.createElement('div');circle.className='step-circle'+(sc[i]?' checked':'');circle.onclick=()=>toggleCheck(id,i);row.appendChild(circle);
       const body=document.createElement('div');body.className='step-body';
       const textEl=document.createElement('div');textEl.className='step-text'+(sc[i]?' done':'');textEl.textContent=s.text;body.appendChild(textEl);
-      const textInput=document.createElement('textarea');textInput.className='step-text-input';textInput.rows=1;textInput.value=s.text;
-      textInput.oninput=function(){this.style.height='auto';this.style.height=this.scrollHeight+'px';updateStepText(id,i,this.value);};body.appendChild(textInput);
+      const ti=document.createElement('textarea');ti.className='step-text-input';ti.rows=1;ti.value=s.text;ti.oninput=function(){this.style.height='auto';this.style.height=this.scrollHeight+'px';updateStepText(id,i,this.value);};body.appendChild(ti);
       const durEl=document.createElement('div');durEl.className='step-dur';durEl.textContent=s.dur||'';body.appendChild(durEl);
-      const durInput=document.createElement('input');durInput.className='step-dur-input';durInput.value=s.dur||'';durInput.placeholder='duration';durInput.onchange=()=>updateStepDur(id,i,durInput.value);body.appendChild(durInput);
+      const di=document.createElement('input');di.className='step-dur-input';di.value=s.dur||'';di.placeholder='duration';di.onchange=()=>updateStepDur(id,i,di.value);body.appendChild(di);
       if(s.link&&!isEdit){const lb=document.createElement('button');lb.className='step-link';lb.textContent='→ '+(s.linkLabel||'');lb.onclick=(e)=>{e.stopPropagation();jumpToProtocol(s.link);};body.appendChild(lb);}
       row.appendChild(body);
       const del=document.createElement('button');del.className='step-del';del.textContent='×';del.onclick=(e)=>{e.stopPropagation();deleteStep(id,i);};row.appendChild(del);
@@ -585,17 +636,14 @@ function buildCard(id){
     wrap.appendChild(list);
     const addBtn=document.createElement('button');addBtn.className='add-step-btn';addBtn.textContent='+ Add step';addBtn.onclick=()=>addStep(id);if(isEdit)addBtn.style.display='block';wrap.appendChild(addBtn);
     const footer=document.createElement('div');footer.className='card-footer';
-    const resetBtn=document.createElement('button');resetBtn.className='reset-btn';resetBtn.textContent='↺ Reset';resetBtn.onclick=(e)=>{e.stopPropagation();resetChecks(id);};
-    const editBtn=document.createElement('button');editBtn.className='edit-btn'+(isEdit?' on':'');editBtn.textContent=isEdit?'✓ Done':'✏ Edit';editBtn.onclick=(e)=>{e.stopPropagation();toggleEdit(id);};
-    footer.appendChild(resetBtn);footer.appendChild(editBtn);wrap.appendChild(footer);
+    const rb=document.createElement('button');rb.className='reset-btn';rb.textContent='↺ Reset';rb.onclick=(e)=>{e.stopPropagation();resetChecks(id);};
+    const eb=document.createElement('button');eb.className='edit-btn'+(isEdit?' on':'');eb.textContent=isEdit?'✓ Done':'✏ Edit';eb.onclick=(e)=>{e.stopPropagation();toggleEdit(id);};
+    footer.appendChild(rb);footer.appendChild(eb);wrap.appendChild(footer);
   }
   return wrap;
 }
 
-function reRender(id){
-  const ex=document.querySelector('.rcard[data-id="'+id+'"]')||document.getElementById('card-'+id);
-  if(!ex)return;const nc=buildCard(id);nc.id='card-'+id;ex.replaceWith(nc);updateMetrics();
-}
+function reRender(id){const ex=document.querySelector('.rcard[data-id="'+id+'"]')||document.getElementById('card-'+id);if(!ex)return;const nc=buildCard(id);nc.id='card-'+id;ex.replaceWith(nc);updateMetrics();}
 function toggleOpen(id){openCards[id]=!openCards[id];saveOpen();reRender(id);}
 function toggleEdit(id){editCards[id]=!editCards[id];reRender(id);}
 function toggleCheck(id,i){const r=getRoutine(id);if(!checks[id])checks[id]=Array(r.steps.length).fill(false);checks[id][i]=!checks[id][i];saveChecks();reRender(id);updateMetrics();}
@@ -607,7 +655,7 @@ function addStep(id){const r=getRoutine(id);r.steps.push({text:'New step',dur:'�
 function moveStep(id,from,to){const r=getRoutine(id);const[mv]=r.steps.splice(from,1);r.steps.splice(to,0,mv);if(checks[id]){const c=checks[id];const[mc]=c.splice(from,1);c.splice(to,0,mc);}setRoutine(id,r);saveChecks();reRender(id);}
 function jumpToProtocol(id){jumpTo=id;showTab('protocols',document.getElementById('nav-protocols'));}
 
-// ── REMINDERS ──────────────────────────────────────────────────
+// ── REMINDERS ─────────────────────────────────────────────────
 const CAT_TAGS={baseball:'tag-baseball',school:'tag-class',health:'tag-routine',work:'tag-daily',general:'tag-daily'};
 function renderReminders(){
   const pills=document.getElementById('filter-pills');pills.innerHTML='';
@@ -633,14 +681,14 @@ function addReminder(){
 function toggleReminder(id){const r=reminders.find(r=>r.id===id);if(r)r.done=!r.done;saveReminders();renderReminders();updateMetrics();}
 function deleteReminder(id){reminders=reminders.filter(r=>r.id!==id);saveReminders();renderReminders();updateMetrics();}
 
-// ── SERVICE WORKER ─────────────────────────────────────────────
+// ── SERVICE WORKER ────────────────────────────────────────────
 if('serviceWorker'in navigator){
-  const sw=`const CACHE='mylyfe-v2';self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll([self.location.href]))));self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));`;
+  const sw=`const CACHE='mylyfe-v3';self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll([self.location.href]))));self.addEventListener('fetch',e=>{if(e.request.url.includes('googleapis.com')||e.request.url.includes('accounts.google.com'))return;e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)));});`;
   const blob=new Blob([sw],{type:'application/javascript'});
   navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(()=>{});
 }
 
-// ── INIT ───────────────────────────────────────────────────────
+// ── INIT ──────────────────────────────────────────────────────
 load();setToday();renderWater();updateMetrics();
 </script>
 </body>
